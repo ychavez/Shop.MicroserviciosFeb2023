@@ -19,6 +19,7 @@ namespace Catalog.api.Controllers
         public async Task<ActionResult<Product>> CreateProduct([FromBody] Product product)
         {
             await productRepository.CreateProduct(product);
+
             return Ok();
         }
 
