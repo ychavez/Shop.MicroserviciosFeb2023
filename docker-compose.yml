@@ -10,5 +10,18 @@ services:
   catalogdb:
      image: mongo
 
+  inventory.grpc:
+    image: ${DOCKER_REGISTRY-}inventorygrpc
+    build:
+      context: .
+      dockerfile: Inventory.grpc/Dockerfile
+
+  basket.api:
+    image: ${DOCKER_REGISTRY-}basketapi
+    build:
+      context: .
+      dockerfile: Basket.api/Dockerfile
+
 volumes:
    mongo_data:
+
