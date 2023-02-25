@@ -10,7 +10,7 @@ namespace FuncExpTuple
 
         public static void Run()
         {
-            string palabra = "aaasssdddffghhhjjk";
+            string palabra = "aaasssdddffhhhjjk";
             //Console.WriteLine(PrimerNoRepetidoClassic(palabra));
             //Console.WriteLine(GetPrimerNoRepetidoFunc(palabra));
             //Ejecutar(x => x.First(), "Hola");
