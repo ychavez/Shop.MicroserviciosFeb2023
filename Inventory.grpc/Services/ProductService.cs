@@ -42,8 +42,6 @@ namespace Inventory.grpc.Services
  * 4 tendremos que tener un motor de validaciones y de control de excepciones globales
  * 5 usaremos el patron de repositorio pero haciendo uso de los generics para reutilizar el codigo
  * 6 paginacion, ordenamiento, joins y CRUD
- * 7 campos de auditoria
- * 8 manejaremos multi tenanci
  * 9 usar CQRS, AutoMapper, MediatR
  * 10 pruebas unitarias
  * */
