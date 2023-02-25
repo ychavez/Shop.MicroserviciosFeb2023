@@ -1,4 +1,7 @@
 
+using Basket.api.Repositories;
+using Inventory.grpc.Protos;
+
 namespace Basket.api
 {
     public class Program
@@ -13,6 +16,19 @@ namespace Basket.api
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = builder.Configuration.GetValue<string>("CacheSettings:ConnectionString");
+            });
+
+            builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+
+
+            builder.Services.AddGrpcClient<ExistanceService.ExistanceServiceClient>
+                (o => o.Address = new Uri(builder.Configuration["GrpcSettings:HostAddress"]!));
+
+            //ExistanceService.ExistanceServiceClient
 
             var app = builder.Build();
 
