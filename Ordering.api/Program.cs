@@ -1,7 +1,9 @@
 
 using Microsoft.EntityFrameworkCore;
 using Ordering.Application;
+using Ordering.Application.Contracts;
 using Ordering.Infrastructure.Persistence;
+using Ordering.Infrastructure.Repositories;
 
 namespace Ordering.api
 {
@@ -19,6 +21,8 @@ namespace Ordering.api
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<OrderContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("OrderingConnection")));
+
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             builder.Services.AddApplicationServices();
 
