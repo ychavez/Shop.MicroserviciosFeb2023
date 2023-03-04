@@ -15,6 +15,7 @@ namespace Ordering.Application.Features.Orders.Queries.GetOrdersList
             this.repository = repository;
             this.mapper = mapper;
         }
+
         public async Task<List<OrdersViewModel>> Handle(GetOrdersListQuery request, CancellationToken cancellationToken)
         {
             var orders = await repository.GetAsync(x => x.UserName == request.UserName);
