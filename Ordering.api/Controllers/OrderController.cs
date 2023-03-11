@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Ordering.Application.Features.Orders.Commands.Checkout;
 using Ordering.Application.Features.Orders.Queries.GetOrdersList;
@@ -17,6 +18,7 @@ namespace Ordering.api.Controllers
         }
 
         [HttpGet("{userName}")]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<ActionResult<IEnumerable<OrdersViewModel>>> GetOrders(string userName)
             => await mediator.Send(new GetOrdersListQuery { UserName = userName });
 

@@ -1,12 +1,15 @@
 
 using EventBus.Messages.Common;
 using MassTransit;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Ordering.api.EventBusConsumer;
 using Ordering.Application;
 using Ordering.Application.Contracts;
 using Ordering.Infrastructure.Persistence;
 using Ordering.Infrastructure.Repositories;
+using System.Text;
 
 namespace Ordering.api
 {
@@ -47,6 +50,26 @@ namespace Ordering.api
 
             builder.Services.AddAutoMapper(typeof(Program));
 
+            builder.Services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(x =>
+                {
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey
+                        (Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("Identity:Key")!)),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -56,6 +79,7 @@ namespace Ordering.api
                 app.UseSwaggerUI();
             }
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
