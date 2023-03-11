@@ -28,3 +28,9 @@ namespace Ordering.Application.Behaviors
         }
     }
 }
+
+/*
+ * 1.- crear 2 servicios rest (libre)
+ * 2.- conectarlos y enviar un mensaje por Rabbit MQ (NOTA: Usar el rabbit que ya tenemos en docker)
+ * 
+ */
