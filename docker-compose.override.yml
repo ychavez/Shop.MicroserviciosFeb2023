@@ -32,6 +32,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - "CacheSettings__ConnectionString=basketdb:6379"
       - "GrpcSettings_HostAddress=http://inventory.grpc:80"
+      - "EventBusSettings__HostAddress=amqp://guest:guest@rabbitmq:5672"
     ports:
       - "8001:80"
     depends_on:
@@ -49,3 +50,9 @@ services:
     container_name: basketdb
     ports:
      - "6379:6379"
+  
+  rabbitmq:
+    container_name: rabbitmq
+    ports:
+     - 5672:5672
+     - 15672:15672 

@@ -15,7 +15,7 @@ namespace Ordering.Test.Features.Orders.GetOrderList
         [Theory]
         [InlineData("as")]
         [InlineData("aasdfghjkloiuytrewqas")]
-        public void GetOrderListQuery_UserName_ShouldHaveError(string userName) 
+        public void GetOrderListQuery_UserName_ShouldHaveError(string userName)
         {
             //Arrange
             var query = new GetOrdersListQuery() { UserName = userName };
@@ -26,10 +26,6 @@ namespace Ordering.Test.Features.Orders.GetOrderList
             //Assert
             Assert.False(result.IsValid);
             Assert.Contains(result.Errors, x => x.PropertyName == nameof(GetOrdersListQuery.UserName));
-
-        
         }
-
-
     }
 }

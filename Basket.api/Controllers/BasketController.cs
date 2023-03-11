@@ -1,6 +1,8 @@
 ﻿using Basket.api.Entities;
 using Basket.api.Repositories;
+using EventBus.Messages.Events;
 using Inventory.grpc.Protos;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Basket.api.Controllers
@@ -11,12 +13,15 @@ namespace Basket.api.Controllers
     {
         private readonly IBasketRepository basketRepository;
         private readonly ExistanceService.ExistanceServiceClient existanceService;
+        private readonly IPublishEndpoint publishEndpoint;
 
         public BasketController(IBasketRepository basketRepository, 
-            ExistanceService.ExistanceServiceClient existanceService)
+            ExistanceService.ExistanceServiceClient existanceService, 
+            IPublishEndpoint publishEndpoint)
         {
             this.basketRepository = basketRepository;
             this.existanceService = existanceService;
+            this.publishEndpoint = publishEndpoint;
         }
 
         [HttpGet("{userName}")]
@@ -50,6 +55,31 @@ namespace Basket.api.Controllers
             return Ok(shoppingCart);
         }
 
+        [HttpPost("Checkout")]
+        public async Task<ActionResult> Checkout([FromBody] BasketCheckout basketCheckout) 
+        {
+            var basket = await basketRepository.GetBasket(basketCheckout.UserName);
 
+            if (basket is null)
+                return BadRequest();
+
+            // enviar el mensaje a Rabbit
+            var eventMessage = new BasketCheckoutEvent
+            {
+                UserName = basketCheckout.UserName,
+                Address = basketCheckout.Address,
+                FirstName = basketCheckout.FirstName,
+                LastName = basketCheckout.LastName,
+                PaymentMethod = basketCheckout.PaymentMethod,
+                TotalPrice = basket.TotalPrice
+            };
+
+            await publishEndpoint.Publish(eventMessage);
+
+            await basketRepository.DeleteBasket(basket.UserName);
+
+            return Accepted();
+
+        }
     }
 }
