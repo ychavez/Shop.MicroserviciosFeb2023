@@ -31,6 +31,27 @@ services:
   rabbitmq:
     image: rabbitmq:3-management-alpine
 
+  gateway:
+    image: ${DOCKER_REGISTRY-}gateway
+    build:
+      context: .
+      dockerfile: Gateway/Dockerfile
+
+  ordering.api:
+    image: ${DOCKER_REGISTRY-}orderingapi
+    build:
+      context: .
+      dockerfile: Ordering.api/Dockerfile
+
+  authentication.api:
+    image: ${DOCKER_REGISTRY-}authenticationapi
+    build:
+      context: .
+      dockerfile: Authentication.api/Dockerfile
+
 volumes:
    mongo_data:
+
+
+
 

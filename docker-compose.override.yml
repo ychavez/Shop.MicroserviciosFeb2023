@@ -9,6 +9,7 @@ services:
       - "8000:80"
     depends_on: 
       - catalogdb
+    container_name: catalog.api
 
   catalogdb:
     container_name: "catalogdb"
@@ -37,6 +38,7 @@ services:
       - "8001:80"
     depends_on:
       - basketdb
+    container_name: basket.api
 
   orderdb:
     container_name: orderdb
@@ -56,3 +58,28 @@ services:
     ports:
      - 5672:5672
      - 15672:15672 
+  
+  gateway:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8004:80"
+    container_name: api.gateway
+
+
+  ordering.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__OrderingConnection=Server=orderdb;Database=Order;Encrypt=false;User id=sa;Password=Pass0rd23" 
+    ports:
+      - "8002:80"
+    container_name: ordering.api
+
+  authentication.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__OrderingConnection=Server=Account;Database=Order;Encrypt=false;User id=sa;Password=Pass0rd23"  
+    ports:
+      - "8003:80"
+    container_name: authentication.api
+
